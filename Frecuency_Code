@@ -1,0 +1,18 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+
+def Contar(Text):
+    A=[chr(n) for n in range(65,91)]
+    C=[]
+    for i in A:
+        C.append(Text.count(i)+Text.count(i.lower()))
+    R={"Letra":A,"Cantidad":C}
+    df=pd.DataFrame(R)
+    return df
+with open("archivo.txt", "r", encoding="utf-8") as f:
+    Text = f.read()
+datos=Contar(Text)
+plt.bar(datos["Letra"], datos["Cantidad"], color="skyblue", edgecolor="black")
+plt.xlabel("Letra")
+plt.ylabel("Cantidad")
+plt.show()
