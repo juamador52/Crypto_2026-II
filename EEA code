@@ -1,0 +1,22 @@
+tabla = []
+
+def EEA(a, b):
+    if b == 0:
+        tabla.append([a, b, "-", a, 1, 0])
+        return (a, 1, 0)
+
+    q = a // b
+    d0, x0, y0 = EEA(b, a % b)
+
+    d = d0
+    x = y0
+    y = x0 - q * y0
+
+    tabla.append([a, b, q, d, x, y])
+    return (d, x, y)
+
+print(EEA(63, 37))
+print("\n","\t".join(("a","b","q","d","x","y")),sep="")
+print("-------"*6)
+for fila in reversed(tabla):
+    print("\t".join((map(str,fila))))
