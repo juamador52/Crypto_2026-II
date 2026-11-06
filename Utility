@@ -1,0 +1,104 @@
+import numpy as np
+
+def EEA(a, b):
+    if b == 0:
+        return (a, 1, 0)
+    q = a // b
+    d0, x0, y0 = EEA(b, a % b)
+    d, x, y = d0, y0, x0 - q * y0
+    return (d, x, y)
+
+def mod_inverse(a, m):
+    a = a % m
+    d, x, y = EEA(a, m)
+    if d != 1:
+        raise ValueError("No existe matriz inversa.")
+    return x % m
+
+def inverse_matrix_2x2(matrix, mod):
+    matrix = np.array(matrix, dtype=int)
+    det = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]) % mod
+    det_inv = mod_inverse(det, mod)
+    
+    adj = np.array([
+        [matrix[1][1], -matrix[0][1]],
+        [-matrix[1][0], matrix[0][0]]
+    ])
+    
+    return (det_inv * adj) % mod
+
+def permute_text(text, indices):
+    n = len(indices)
+    if len(text) % n != 0:
+        text += "0" * (n - (len(text) % n))
+    
+    result = ""
+    for i in range(0, len(text), n):
+        block = text[i:i+n]
+        result += "".join(block[idx - 1] for idx in indices)
+        
+    return result
+
+
+# Homophonic cipher tiene N!/P!(N-P)! con N= 100 (numeros posibles) y P = 26 (letras)
+"""
+1. ¿Cuál es el libro sobre criptografía que Christopher le muestra a Alan?
+A Guide to Codes and Ciphers.
+
+2. ¿Cómo se llamaba la máquina que Alan construyó para descifrar Enigma?
+Christopher.
+
+3. ¿En qué lugar trabajaba Alan durante la guerra?
+Bletchley Park.
+
+4. ¿Qué país utilizaba la máquina Enigma?
+Alemania.
+
+5. ¿Cómo se llamaba la amiga y compañera de trabajo de Alan?
+Joan Clarke.
+
+6. ¿Qué periódico publicó el crucigrama utilizado para reclutar descifradores?
+The Daily Telegraph.
+
+7. ¿Quién era el superior militar que se oponía inicialmente al proyecto de Alan?
+Commander Denniston.
+
+8. ¿Cómo se llamaba el espía soviético que trabajaba en Bletchley Park?
+John Cairncross.
+
+9. ¿Qué organización británica reclutó a Alan para trabajar en el descifrado?
+MI6.
+
+10. ¿Qué nombre tenía el departamento británico encargado de descifrar códigos?
+Government Code and Cypher School.
+
+11. ¿Qué juego utilizaba Alan para comunicarse con Christopher durante su infancia?
+Un juego de mensajes secretos.
+
+12. ¿Cómo se llamaba el amigo de Alan que murió durante su adolescencia?
+Christopher Morcom.
+
+13. ¿Qué enfermedad padecía Christopher Morcom?
+Tuberculosis bovina.
+
+14. ¿Qué instrumento utilizaba el equipo para intentar descifrar los mensajes alemanes?
+La máquina Bombe.
+
+15. ¿Quién era el encargado de dirigir al equipo de criptógrafos antes de que Alan asumiera el liderazgo?
+Hugh Alexander.
+
+16. ¿Qué nombre tenía la máquina de cifrado alemana?
+Enigma.
+
+17. ¿Qué debía encontrar el equipo para poder descifrar los mensajes de Enigma?
+La configuración diaria de la máquina.
+
+18. ¿Qué hacía Joan Clarke antes de incorporarse al equipo de Bletchley Park?
+Resolver el crucigrama del periódico.
+
+19. ¿Quién era el jefe del MI6 que conocía el secreto de Alan?
+Stewart Menzies.
+
+20. ¿Qué le sucedió a Alan después de la guerra por su homosexualidad?
+Fue condenado por indecencia grave y sometido a castración química.
+"""
