@@ -39,7 +39,7 @@ def permute_text(text, indices):
         
     return result
 
-def Powermod(a,b,m):
+def Powermod(a,b,n):
     b2,z=format(b,"08b"),1
     for bit in b2:
         if bit=="1": z=((z**2)*a)%n 
