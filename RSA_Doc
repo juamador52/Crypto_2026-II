@@ -1,0 +1,44 @@
+import base64
+
+
+def Powermod(a, b, n):
+    b2, z = format(b, "08b"), 1
+    for bit in b2:
+        if bit == "1":
+            z = ((z**2) * a) % n
+        else:
+            z = (z**2) % n
+    return z
+
+
+def RSA_doc(doc, Ext, Key, n):
+    with open(doc + "." + Ext, "rb") as f:
+        data = f.read()
+
+    b64_text = base64.b64encode(data).decode()
+    c = [Powermod(ord(ch), Key[0], n) for ch in b64_text]
+
+    Encrypted = b"".join(x.to_bytes(2, "big") for x in c)
+    d = base64.b64encode(Encrypted)
+
+    with open("encriptado.txt", "w") as f:
+        f.write(d.decode())
+
+    with open("encriptado.txt", "r") as f:
+        d_h = base64.b64decode(f.read())
+
+    c_decrypted = [int.from_bytes(d_h[i : i + 2], "big") for i in range(0, len(d_h), 2)]
+    b64_decrypted = "".join(chr(Powermod(m, Key[1], n)) for m in c_decrypted)
+    data_decrypted = base64.b64decode(b64_decrypted)
+
+    with open("RTA." + Ext, "wb") as b:
+        b.write(data_decrypted)
+
+
+Key = [79, 1019]
+n = 3337
+
+doc = input("Nombre: ")
+Ext = input("Extensión: ")
+
+RSA_doc(doc, Ext, Key, n)
