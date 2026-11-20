@@ -1,0 +1,27 @@
+from math import gcd, isqrt
+import random
+
+def encrypt(plaintext, public_key):
+    """Encrypt a plaintext string using the given public key."""
+    e, n = public_key
+    return [pow(ord(c), e, n) for c in plaintext]
+
+
+def decrypt(ciphertext, private_key):
+    """Decrypt a list of ciphertext integers using the given private key."""
+    d, n = private_key
+    return ''.join(chr(pow(c, d, n)) for c in ciphertext)
+
+
+def RSA(Text, Key, n, k, Encrypt=True):
+    U_Text = "".join(Text.upper().split())
+    M=[U_Text[i:i+k] for i in range(0,len(U_Text), k)]
+    c=[]
+    for m in M:
+        if Encrypt:
+            ci=encrypt(int(m), (Key,n))
+        else:
+            ci=decrypt(int(m), (Key,n))
+        c.append(str(ci))
+        ci=""
+    return " ".join(c)
