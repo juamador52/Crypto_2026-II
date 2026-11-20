@@ -1,27 +1,31 @@
-from math import gcd, isqrt
-import random
-
-def encrypt(plaintext, public_key):
-    """Encrypt a plaintext string using the given public key."""
-    e, n = public_key
-    return [pow(ord(c), e, n) for c in plaintext]
-
-
-def decrypt(ciphertext, private_key):
-    """Decrypt a list of ciphertext integers using the given private key."""
-    d, n = private_key
-    return ''.join(chr(pow(c, d, n)) for c in ciphertext)
-
-
-def RSA(Text, Key, n, k, Encrypt=True):
-    U_Text = "".join(Text.upper().split())
-    M=[U_Text[i:i+k] for i in range(0,len(U_Text), k)]
-    c=[]
-    for m in M:
-        if Encrypt:
-            ci=encrypt(int(m), (Key,n))
+def Powermod(a, b, n):
+    b2, z = format(b, "08b"), 1
+    for bit in b2:
+        if bit == "1":
+            z = ((z**2) * a) % n
         else:
-            ci=decrypt(int(m), (Key,n))
-        c.append(str(ci))
-        ci=""
-    return " ".join(c)
+            z = (z**2) % n
+    return z
+
+
+def RSA(Text, Key, n, k=3):
+    if isinstance(Text, list):
+        M = Text
+    else:
+        U_Text = "".join(Text.split())
+        M = [U_Text[i : i + k] for i in range(0, len(U_Text), k)]
+    c = []
+    for m in M:
+        c.append(str(Powermod(int(m), Key, n)))
+    return c
+
+
+Key = [79, 1019]
+n = 3337
+
+Text = input()
+c = RSA(Text, Key[0], n, 3)
+print(" ".join(c))
+
+print(" ".join(RSA(c, Key[1], n)))
+
